@@ -42,8 +42,8 @@ echo "Machine State Before: " >> ${OUTPUT_PATH} 2>&1
 /opt/sambaflow/bin/snfadm -l inventory >> ${OUTPUT_PATH} 2>&1
 #######################
 if [ -e ${OUTDIR}/bertlrg/bertlrg.pef ] ; then
-#rm ${OUTDIR}/bertlrg/bertlrg.pef
- echo "${OUTDIR}/bertlrg/bertlrg.pef exists"
+ rm ${OUTDIR}/bertlrg/bertlrg.pef
+ #echo "${OUTDIR}/bertlrg/bertlrg32.pef exists"
 fi
 if [ ! -e ${OUTDIR}/bertlrg/bertlrg.pef ] ; then
   export SN_NUM_THREADS=32
@@ -56,7 +56,15 @@ fi
 #######################
 echo "RUN" >> ${OUTPUT_PATH} 2>&1
 env >> ${OUTPUT_PATH} 2>&1
+
+# default
 /usr/local/bin/sbatch --output=${HOME}/slurm-%A.out --ntasks 16 --gres=rdu:8 --ntasks-per-node 16  --nodes 1 --cpus-per-task=8  ${PROJ_DIR}/BertLarge_run.sh $1 >> ${OUTPUT_PATH} 2>&1
+
+# ntask8_tskpernode8_cpupertsk16
+#/usr/local/bin/sbatch --output=${HOME}/slurm-%A.out --ntasks 8 --gres=rdu:8 --ntasks-per-node 8  --nodes 1 --cpus-per-task=16  ${PROJ_DIR}/BertLarge_run.sh $1 >> ${OUTPUT_PATH} 2>&1
+
+# ntask32_tskpernode32_cpupertsk4
+#/usr/local/bin/sbatch --output=${HOME}/slurm-%A.out --ntasks 32 --gres=rdu:8 --ntasks-per-node 32  --nodes 1 --cpus-per-task=4  ${PROJ_DIR}/BertLarge_run.sh $1 >> ${OUTPUT_PATH} 2>&1
 
 #######################
 echo "Machine state After: " >> ${OUTPUT_PATH} 2>&1
